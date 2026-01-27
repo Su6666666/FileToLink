@@ -28,7 +28,7 @@ ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ
 
 # --- Force Subscribe Settings ---
 FORCE_SUB_CHANNEL = int(environ.get('FORCE_SUB_CHANNEL', '0')) # Koyeb-এ আপনার চ্যানেল আইডি সেট করবেন
-FORCE_SUB_TEXT = environ.get('FORCE_SUB_TEXT', 'বটটি ব্যবহার করতে হলে আপনাকে আমাদের চ্যানেলে জয়েন করতে হবে।')
+FORCE_SUB_TEXT = environ.get('FORCE_SUB_TEXT', 'Sᴏʀʀy Dᴜᴅᴇ Yᴏᴜ'ʀᴇ Nᴏᴛ Jᴏɪɴᴇᴅ My Cʜᴀɴɴᴇʟ 😐. Sᴏ Pʟᴇᴀꜱᴇ Jᴏɪɴ Oᴜʀ Uᴩᴅᴀᴛᴇ Cʜᴀɴɴᴇʟ Tᴏ Cᴄᴏɴᴛɪɴᴜᴇ')
 # --------------------------------
 
 # MongoDB information

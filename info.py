@@ -26,6 +26,11 @@ URL = environ.get("URL", "")
 LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1001994332079'))
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '919169586').split()]
 
+# --- Force Subscribe Settings ---
+FORCE_SUB_CHANNEL = int(environ.get('FORCE_SUB_CHANNEL', '0')) # Koyeb-এ আপনার চ্যানেল আইডি সেট করবেন
+FORCE_SUB_TEXT = environ.get('FORCE_SUB_TEXT', 'বটটি ব্যবহার করতে হলে আপনাকে আমাদের চ্যানেলে জয়েন করতে হবে।')
+# --------------------------------
+
 # MongoDB information
 DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://SGBACKUP14:SGBACKUP@cluster0.8ub0b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 DATABASE_NAME = environ.get('DATABASE_NAME', "techvjautobot")

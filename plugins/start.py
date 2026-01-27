@@ -29,7 +29,10 @@ async def start(client, message):
     # Force Subscribe Check
     if not await is_subscribed(client, message.from_user.id):
         join_btn = InlineKeyboardMarkup(
-            [[InlineKeyboardButton("🔔 Join Channel", url=f"https://t.me/{FORCE_SUB_CHANNEL.replace('@','')}")]]
+            [InlineKeyboardButton(
+    "🔔 Join Channel",
+    url="https://t.me/SGBACKUP"
+)]
         )
         await message.reply_text(
             text=(

@@ -31,7 +31,7 @@ async def start(client, message):
                  [InlineKeyboardButton("🔄 Try Again", url=f"https://t.me/{temp.U_NAME}?start=true")]]
             )
             await message.reply_text(
-                text="<b>আপনাকে অবশ্যই আমাদের চ্যানেলে জয়েন করতে হবে এই বটটি ব্যবহার করার জন্য। নিচে জয়েন বাটনে ক্লিক করুন।</b>",
+                text="<b>Sorry! You need to join our Update Channel first to download or stream this file. Please join and try again. ✨</b>",
                 reply_markup=join_button,
                 parse_mode=enums.ParseMode.HTML
             )
@@ -59,7 +59,8 @@ async def stream_start(client, message):
         try:
             await client.get_chat_member(AUTH_CHANNEL, message.from_user.id)
         except UserNotParticipant:
-            await message.reply_text("ফাইল পাওয়ার আগে দয়া করে চ্যানেলে জয়েন করুন।", quote=True)
+            await message.reply_text("​Please join and try again. 
+📢 Join here: @SGBACKUP", quote=True)
             return
 
     file = getattr(message, message.media.value)

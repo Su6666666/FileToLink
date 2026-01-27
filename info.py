@@ -33,7 +33,7 @@ ADMINS = [
 
 # ---------------- FORCE SUBSCRIBE ----------------
 # Put your channel username with @
-FORCE_SUB_CHANNEL = environ.get("FORCE_SUB_CHANNEL", "@SGBACKUP")
+FORCE_SUB_CHANNEL = environ.get("FORCE_SUB_CHANNEL", "-1001877309572")
 
 # ---------------- DATABASE ----------------
 DATABASE_URI = environ.get(

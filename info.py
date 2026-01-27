@@ -26,6 +26,10 @@ URL = environ.get("URL", "")
 LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1001994332079'))
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '919169586').split()]
 
+# --- Force Subscribe Info ---
+# এখানে আপনার চ্যানেলের আইডি দিন। এটি অবশ্যই -100 দিয়ে শুরু হবে।
+AUTH_CHANNEL = int(environ.get('AUTH_CHANNEL', '-1001877309572')) 
+
 # MongoDB information
 DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://SGBACKUP14:SGBACKUP@cluster0.8ub0b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 DATABASE_NAME = environ.get('DATABASE_NAME', "techvjautobot")

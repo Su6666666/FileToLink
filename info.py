@@ -27,7 +27,7 @@ LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1001994332079'))
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '919169586').split()]
 
 # --- Force Subscribe Settings ---
-FORCE_SUB_CHANNEL = int(environ.get('FORCE_SUB_CHANNEL', '0')) # Koyeb-এ আপনার চ্যানেল আইডি সেট করবেন
+FORCE_SUB_CHANNEL = int(environ.get('FORCE_SUB_CHANNEL', '-1001877309572')) # Koyeb-এ আপনার চ্যানেল আইডি সেট করবেন
 FORCE_SUB_TEXT = environ.get('FORCE_SUB_TEXT', 'Sᴏʀʀy Dᴜᴅᴇ Yᴏᴜ'ʀᴇ Nᴏᴛ Jᴏɪɴᴇᴅ My Cʜᴀɴɴᴇʟ 😐. Sᴏ Pʟᴇᴀꜱᴇ Jᴏɪɴ Oᴜʀ Uᴩᴅᴀᴛᴇ Cʜᴀɴɴᴇʟ Tᴏ Cᴄᴏɴᴛɪɴᴜᴇ')
 # --------------------------------
 

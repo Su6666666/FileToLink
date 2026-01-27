@@ -3,18 +3,41 @@ import humanize
 from Script import script
 from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceReply, CallbackQuery
-from info import URL, LOG_CHANNEL, SHORTLINK
+from info import URL, LOG_CHANNEL, SHORTLINK, AUTH_CHANNEL # AUTH_CHANNEL ইমপোর্ট করা হয়েছে
 from urllib.parse import quote_plus
 from TechVJ.util.file_properties import get_name, get_hash, get_media_file_size
 from TechVJ.util.human_readable import humanbytes
 from database.users_chats_db import db
 from utils import temp, get_shortlink
+from pyrogram.errors import UserNotParticipant # এটি দরকার মেম্বার চেক করার জন্য
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
     if not await db.is_user_exist(message.from_user.id):
         await db.add_user(message.from_user.id, message.from_user.first_name)
         await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention))
+    
+    # --- Force Subscribe Logic Start ---
+    if AUTH_CHANNEL:
+        try:
+            user = await client.get_chat_member(AUTH_CHANNEL, message.from_user.id)
+            if user.status == enums.ChatMemberStatus.BANNED:
+                await message.reply_text("দুঃখিত, আপনাকে এই বট থেকে ব্যান করা হয়েছে।")
+                return
+        except UserNotParticipant:
+            # ইউজার যদি জয়েন না থাকে তবে এই মেসেজটি যাবে
+            join_button = InlineKeyboardMarkup(
+                [[InlineKeyboardButton("📢 Join Channel", url=f"https://t.me/SGBACKUP")],
+                 [InlineKeyboardButton("🔄 Try Again", url=f"https://t.me/{temp.U_NAME}?start=true")]]
+            )
+            await message.reply_text(
+                text="<b>আপনাকে অবশ্যই আমাদের চ্যানেলে জয়েন করতে হবে এই বটটি ব্যবহার করার জন্য। নিচে জয়েন বাটনে ক্লিক করুন।</b>",
+                reply_markup=join_button,
+                parse_mode=enums.ParseMode.HTML
+            )
+            return
+    # --- Force Subscribe Logic End ---
+
     rm = InlineKeyboardMarkup(
         [[
             InlineKeyboardButton("✨ Update Channel", url="https://t.me/SGBACKUP")
@@ -31,6 +54,14 @@ async def start(client, message):
 
 @Client.on_message(filters.private & (filters.document | filters.video))
 async def stream_start(client, message):
+    # --- ফাইল পাঠানোর সময়ও Force Subscribe চেক করবে ---
+    if AUTH_CHANNEL:
+        try:
+            await client.get_chat_member(AUTH_CHANNEL, message.from_user.id)
+        except UserNotParticipant:
+            await message.reply_text("ফাইল পাওয়ার আগে দয়া করে চ্যানেলে জয়েন করুন।", quote=True)
+            return
+
     file = getattr(message, message.media.value)
     filename = file.file_name
     filesize = humanize.naturalsize(file.file_size) 

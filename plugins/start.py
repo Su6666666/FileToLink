@@ -59,7 +59,7 @@ async def stream_start(client, message):
         try:
             await client.get_chat_member(AUTH_CHANNEL, message.from_user.id)
         except UserNotParticipant:
-            await message.reply_text("📢 ​Please join and try again @SGBACKUP", quote=True)
+            await message.reply_text("📢 Please join @SGBACKUP and try again.", quote=True)
             return
 
     file = getattr(message, message.media.value)

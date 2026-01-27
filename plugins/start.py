@@ -22,7 +22,7 @@ async def start(client, message):
         try:
             user = await client.get_chat_member(AUTH_CHANNEL, message.from_user.id)
             if user.status == enums.ChatMemberStatus.BANNED:
-                await message.reply_text("দুঃখিত, আপনাকে এই বট থেকে ব্যান করা হয়েছে।")
+                await message.reply_text("Sorry, you are banned from using this bot.")
                 return
         except UserNotParticipant:
             # ইউজার যদি জয়েন না থাকে তবে এই মেসেজটি যাবে

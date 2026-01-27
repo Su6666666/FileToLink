@@ -2,9 +2,8 @@ import random
 import humanize
 from Script import script
 from pyrogram import Client, filters, enums
-from pyrogram.errors import UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ForceReply, CallbackQuery
-from info import URL, LOG_CHANNEL, SHORTLINK, FORCE_SUB_CHANNEL, FORCE_SUB_TEXT
+from info import URL, LOG_CHANNEL, SHORTLINK
 from urllib.parse import quote_plus
 from TechVJ.util.file_properties import get_name, get_hash, get_media_file_size
 from TechVJ.util.human_readable import humanbytes
@@ -13,27 +12,9 @@ from utils import temp, get_shortlink
 
 @Client.on_message(filters.command("start") & filters.incoming)
 async def start(client, message):
-    # --- Force Subscribe Logic ---
-    if FORCE_SUB_CHANNEL:
-        try:
-            await client.get_chat_member(FORCE_SUB_CHANNEL, message.from_user.id)
-        except UserNotParticipant:
-            invite_link = await client.create_chat_invite_link(FORCE_SUB_CHANNEL)
-            await message.reply_text(
-                text=FORCE_SUB_TEXT,
-                reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton("Join Channel", url=invite_link.invite_link)]]
-                )
-            )
-            return
-        except Exception as e:
-            print(f"Force Sub Error: {e}")
-    # -----------------------------
-
     if not await db.is_user_exist(message.from_user.id):
         await db.add_user(message.from_user.id, message.from_user.first_name)
         await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention))
-    
     rm = InlineKeyboardMarkup(
         [[
             InlineKeyboardButton("✨ Update Channel", url="https://t.me/SGBACKUP")
@@ -50,21 +31,6 @@ async def start(client, message):
 
 @Client.on_message(filters.private & (filters.document | filters.video))
 async def stream_start(client, message):
-    # --- Force Subscribe Logic for Files ---
-    if FORCE_SUB_CHANNEL:
-        try:
-            await client.get_chat_member(FORCE_SUB_CHANNEL, message.from_user.id)
-        except UserNotParticipant:
-            invite_link = await client.create_chat_invite_link(FORCE_SUB_CHANNEL)
-            await message.reply_text(
-                text=FORCE_SUB_TEXT,
-                reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton("Join Channel", url=invite_link.invite_link)]]
-                )
-            )
-            return
-    # --------------------------------------
-
     file = getattr(message, message.media.value)
     filename = file.file_name
     filesize = humanize.naturalsize(file.file_size) 
@@ -76,7 +42,7 @@ async def stream_start(client, message):
         chat_id=LOG_CHANNEL,
         file_id=fileid,
     )
-    
+    fileName = {quote_plus(get_name(log_msg))}
     if SHORTLINK == False:
         stream = f"{URL}watch/{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
         download = f"{URL}{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
@@ -85,11 +51,11 @@ async def stream_start(client, message):
         download = await get_shortlink(f"{URL}{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}")
         
     await log_msg.reply_text(
-        text=f"•• ʟɪɴᴋ ɢᴇɴᴇʀᴀᴛᴇᴅ ꜰᴏʀ ɪᴅ #{user_id} \n•• ᴜꜱᴇʀɴᴀᴍᴇ : {username} \n\n•• ᖴᎥᒪᗴ Nᗩᗰᗴ : {get_name(log_msg)}",
+        text=f"•• ʟɪɴᴋ ɢᴇɴᴇʀᴀᴛᴇᴅ ꜰᴏʀ ɪᴅ #{user_id} \n•• ᴜꜱᴇʀɴᴀᴍᴇ : {username} \n\n•• ᖴᎥᒪᗴ Nᗩᗰᗴ : {fileName}",
         quote=True,
         disable_web_page_preview=True,
-        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🚀 Fast Download 🚀", url=download),  
-                                            InlineKeyboardButton('🖥️ Watch online 🖥️', url=stream)]])  
+        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🚀 Fast Download 🚀", url=download),  # we download Link
+                                            InlineKeyboardButton('🖥️ Watch online 🖥️', url=stream)]])  # web stream Link
     )
     rm=InlineKeyboardMarkup(
         [
